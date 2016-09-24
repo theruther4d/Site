@@ -3,14 +3,16 @@
     width: 100%;
     height: 600px;
     overflow: hidden;
+    perspective: 400;
 }
 
 .hero {
     display: flex;
     left: 50%;
-    transform: translateX( -50% );
+    transform: translateX( -50% ) translateZ( 0 ) rotateX( 60deg );
     position: absolute;
     top: 0;
+    z-index: 1;
 
     &__headline {
         position: absolute;
@@ -20,11 +22,10 @@
         left: 0;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        align-content: center;
         justify-content: center;
-        // will-change: transform;
+        text-align: center;
         transition: transform 0.016s ease;
+        z-index: 2;
     }
 
     &__h2 {
@@ -34,15 +35,19 @@
     &__col {
         flex-grow: 0;
         flex-shrink: 0;
-        width: 40px;
-        padding: 0 10px;
-        // will-change: transform;
+        width: 20px;
+        margin: 0 20px;
         transition: transform 0.016s ease;
     }
 
     &__line {
         width: 100%;
         border-radius: 40px;
+        will-change: transform;
+
+        .hero.will--init & {
+            // opacity: 0;
+        }
 
         + .hero__line {
             margin-top: 20px;

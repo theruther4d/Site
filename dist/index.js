@@ -326,144 +326,194 @@ var _Parallax = require('./Parallax.js');
 
 var _Parallax2 = _interopRequireDefault(_Parallax);
 
+var _randomNumBetween = require('./randomNumBetween.js');
+
+var _randomNumBetween2 = _interopRequireDefault(_randomNumBetween);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var main = function () {
     return {
-        initHeroParallax: function initHeroParallax() {
-            var SLOW_FROM = 0;
-            var SLOW_TO = -300;
-            var MEDIUM_FROM = 0;
-            var MEDIUM_TO = -600;
-            var FAST_FROM = 0;
-            var FAST_TO = -900;
-            var XXSLOW_FROM = 0;
-            var XXSLOW_TO = -100;
-            var XXMEDIUM_FROM = 0;
-            var XXMEDIUM_TO = -150;
-            var XXFAST_FROM = 0;
-            var XXFAST_TO = -200;
-            var HEADLINE_FROM = 0;
-            var HEADLINE_TO = -75;
+        hero: {
+            init: function init() {
+                var HERO = document.getElementById('header');
+                var LINES = [].slice.apply(document.querySelectorAll('.hero__line'));
 
-            var slowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=slow]'));
-            var mediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=medium]'));
-            var fastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=fast]'));
-            var xxslowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxfast]'));
-            var xxmediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxmedium]'));
-            var xxfastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxlarge]'));
-            var slow = [];
-            var medium = [];
-            var fast = [];
-            var xxslow = [];
-            var xxmedium = [];
-            var xxfast = [];
+                HERO.classList.add('will--init');
 
-            var ParallaxItem = function () {
-                function ParallaxItem(node) {
-                    _classCallCheck(this, ParallaxItem);
+                // while( LINES.length ) {
+                // const RAND = Math.floor( randomNumBetween( 0 ).and( LINES.length ) );
+                // const LINE = LINES.splice( RAND, 1 );
 
-                    this._node = node;
-                    this._style = this._node.style;
-                }
+                // LINE.classList.add( 'will--appear' );
+                //
+                // setTimeout( () => {
+                //     LINE.classList.add( 'did--appear' );
+                // }, 250 );
+                // }
 
-                _createClass(ParallaxItem, [{
-                    key: 'update',
-                    value: function update(val) {
-                        this._style.transform = 'translate3d( 0, ' + val.toFixed(2) + 'px, 0 )';
+                HERO.classList.add('did--init');
+            },
+
+            parallax: function parallax() {
+                var SLOW_TO = -300;
+                var MEDIUM_TO = -600;
+                var FAST_TO = -900;
+                var XXSLOW_TO = -100;
+                var XXMEDIUM_TO = -150;
+                var XXFAST_TO = -200;
+                var HEADLINE_TO = -75;
+
+                var slowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=slow]'));
+                var mediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=medium]'));
+                var fastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=fast]'));
+                var xxslowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxfast]'));
+                var xxmediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxmedium]'));
+                var xxfastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxlarge]'));
+
+                var slow = [];
+                var medium = [];
+                var fast = [];
+                var xxslow = [];
+                var xxmedium = [];
+                var xxfast = [];
+
+                var slow_val = 0;
+                var medium_val = 0;
+                var fast_val = 0;
+                var xxslow_val = 0;
+                var xxmedium_val = 0;
+                var xxlarge_val = 0;
+                var headline_val = 0;
+
+                var ParallaxItem = function () {
+                    function ParallaxItem(node) {
+                        _classCallCheck(this, ParallaxItem);
+
+                        this._node = node;
+                        this._style = this._node.style;
                     }
-                }]);
 
-                return ParallaxItem;
-            }();
+                    _createClass(ParallaxItem, [{
+                        key: 'update',
+                        value: function update(val) {
+                            this._style.transform = 'translate3d( 0, ' + val.toFixed(2) + 'px, 0 )';
+                        }
+                    }]);
 
-            ;
+                    return ParallaxItem;
+                }();
 
-            slowNodes.map(function (node) {
-                slow.push(new ParallaxItem(node));
-            });
+                ;
 
-            mediumNodes.map(function (node) {
-                medium.push(new ParallaxItem(node));
-            });
-
-            fastNodes.map(function (node) {
-                fast.push(new ParallaxItem(node));
-            });
-
-            xxslowNodes.map(function (node) {
-                xxslow.push(new ParallaxItem(node));
-            });
-
-            xxmediumNodes.map(function (node) {
-                xxmedium.push(new ParallaxItem(node));
-            });
-
-            xxfastNodes.map(function (node) {
-                xxfast.push(new ParallaxItem(node));
-            });
-
-            var headlineNode = new ParallaxItem(document.getElementById('hero-headline'));
-
-            var updateItems = function updateItems(slowProg, mediumProg, fastProg, xxslowProg, xxmediumProg, xxfastProg) {
-                slow.map(function (item) {
-                    item.update(slowProg);
+                slowNodes.map(function (node) {
+                    slow.push(new ParallaxItem(node));
                 });
 
-                medium.map(function (item) {
-                    item.update(mediumProg);
+                mediumNodes.map(function (node) {
+                    medium.push(new ParallaxItem(node));
                 });
 
-                fast.map(function (item) {
-                    item.update(fastProg);
+                fastNodes.map(function (node) {
+                    fast.push(new ParallaxItem(node));
                 });
 
-                xxslow.map(function (item) {
-                    item.update(xxslowProg);
+                xxslowNodes.map(function (node) {
+                    xxslow.push(new ParallaxItem(node));
                 });
 
-                xxmedium.map(function (item) {
-                    item.update(xxmediumProg);
+                xxmediumNodes.map(function (node) {
+                    xxmedium.push(new ParallaxItem(node));
                 });
 
-                xxfast.map(function (item) {
-                    item.update(xxfastProg);
+                xxfastNodes.map(function (node) {
+                    xxfast.push(new ParallaxItem(node));
                 });
-            };
 
-            var ease = function ease(t) {
-                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-            };
+                var headlineNode = new ParallaxItem(document.getElementById('hero-headline'));
 
-            var header = document.getElementById('header');
-            var parallax = new _Parallax2.default({
-                start: 0,
-                end: header.getBoundingClientRect().bottom,
-                resolver: function resolver(progress) {
-                    var slow_val = SLOW_FROM + (SLOW_TO - SLOW_FROM) / 1 * ease(progress);
-                    var medium_val = MEDIUM_FROM + (MEDIUM_TO - MEDIUM_FROM) / 1 * ease(progress);
-                    var fast_val = FAST_FROM + (FAST_TO - FAST_FROM) / 1 * ease(progress);
-                    var xxslow_val = XXSLOW_FROM + (XXSLOW_TO - XXSLOW_FROM) / 1 * ease(progress);
-                    var xxmedium_val = XXMEDIUM_FROM + (XXMEDIUM_TO - XXMEDIUM_FROM) / 1 * ease(progress);
-                    var xxlarge_val = XXFAST_FROM + (XXFAST_TO - XXFAST_FROM) / 1 * ease(progress);
-                    var headline_val = HEADLINE_FROM + (HEADLINE_TO - HEADLINE_FROM) / 1 * ease(progress);
-                    updateItems(slow_val, medium_val, fast_val, xxslow_val, xxmedium_val, xxlarge_val);
-                    headlineNode.update(headline_val);
-                }
-            });
+                var updateItems = function updateItems(slowProg, mediumProg, fastProg, xxslowProg, xxmediumProg, xxfastProg) {
+                    slow.map(function (item) {
+                        item.update(slowProg);
+                    });
+
+                    medium.map(function (item) {
+                        item.update(mediumProg);
+                    });
+
+                    fast.map(function (item) {
+                        item.update(fastProg);
+                    });
+
+                    xxslow.map(function (item) {
+                        item.update(xxslowProg);
+                    });
+
+                    xxmedium.map(function (item) {
+                        item.update(xxmediumProg);
+                    });
+
+                    xxfast.map(function (item) {
+                        item.update(xxfastProg);
+                    });
+                };
+
+                var ease = function ease(t) {
+                    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                };
+
+                var multiplier;
+
+                var header = document.getElementById('header');
+                var parallax = new _Parallax2.default({
+                    start: 0,
+                    end: header.getBoundingClientRect().bottom,
+                    resolver: function resolver(progress) {
+                        multiplier = ease(progress);
+                        slow_val = SLOW_TO / 1 * multiplier;
+                        medium_val = MEDIUM_TO / 1 * multiplier;
+                        fast_val = FAST_TO / 1 * multiplier;
+                        xxslow_val = XXSLOW_TO / 1 * multiplier;
+                        xxmedium_val = XXMEDIUM_TO / 1 * multiplier;
+                        xxlarge_val = XXFAST_TO / 1 * multiplier;
+                        headline_val = HEADLINE_TO / 1 * multiplier;
+
+                        updateItems(slow_val, medium_val, fast_val, xxslow_val, xxmedium_val, xxlarge_val);
+                        headlineNode.update(headline_val);
+                    }
+                });
+            }
         },
 
         init: function init() {
-            main.initHeroParallax();
+            document.documentElement.classList.remove('no-js');
+            main.hero.init();
+            main.hero.parallax();
         }
     };
 }();
 
 main.init();
 
-},{"./Parallax.js":3}]},{},[5])
+},{"./Parallax.js":3,"./randomNumBetween.js":6}],6:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var randomNumBetween = function randomNumBetween(start) {
+    return {
+        and: function and(end) {
+            return Math.random() * (start - end) + end;
+        }
+    };
+};
+
+exports.default = randomNumBetween;
+
+},{}]},{},[5])
 
 
 //# sourceMappingURL=index.js.map
