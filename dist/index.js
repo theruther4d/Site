@@ -334,22 +334,32 @@ var main = function () {
     return {
         initHeroParallax: function initHeroParallax() {
             var SLOW_FROM = 0;
-            var SLOW_TO = -1000;
+            var SLOW_TO = -300;
             var MEDIUM_FROM = 0;
-            var MEDIUM_TO = -2000;
+            var MEDIUM_TO = -600;
             var FAST_FROM = 0;
-            var FAST_TO = -3000;
-
-            var slow_val = void 0;
-            var fast_val = void 0;
-            var medium_val = void 0;
+            var FAST_TO = -900;
+            var XXSLOW_FROM = 0;
+            var XXSLOW_TO = -100;
+            var XXMEDIUM_FROM = 0;
+            var XXMEDIUM_TO = -150;
+            var XXFAST_FROM = 0;
+            var XXFAST_TO = -200;
+            var HEADLINE_FROM = 0;
+            var HEADLINE_TO = -75;
 
             var slowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=slow]'));
             var mediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=medium]'));
             var fastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=fast]'));
+            var xxslowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxfast]'));
+            var xxmediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxmedium]'));
+            var xxfastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=xxlarge]'));
             var slow = [];
             var medium = [];
             var fast = [];
+            var xxslow = [];
+            var xxmedium = [];
+            var xxfast = [];
 
             var ParallaxItem = function () {
                 function ParallaxItem(node) {
@@ -383,7 +393,21 @@ var main = function () {
                 fast.push(new ParallaxItem(node));
             });
 
-            var updateItems = function updateItems(slowProg, mediumProg, fastProg) {
+            xxslowNodes.map(function (node) {
+                xxslow.push(new ParallaxItem(node));
+            });
+
+            xxmediumNodes.map(function (node) {
+                xxmedium.push(new ParallaxItem(node));
+            });
+
+            xxfastNodes.map(function (node) {
+                xxfast.push(new ParallaxItem(node));
+            });
+
+            var headlineNode = new ParallaxItem(document.getElementById('hero-headline'));
+
+            var updateItems = function updateItems(slowProg, mediumProg, fastProg, xxslowProg, xxmediumProg, xxfastProg) {
                 slow.map(function (item) {
                     item.update(slowProg);
                 });
@@ -394,6 +418,18 @@ var main = function () {
 
                 fast.map(function (item) {
                     item.update(fastProg);
+                });
+
+                xxslow.map(function (item) {
+                    item.update(xxslowProg);
+                });
+
+                xxmedium.map(function (item) {
+                    item.update(xxmediumProg);
+                });
+
+                xxfast.map(function (item) {
+                    item.update(xxfastProg);
                 });
             };
 
@@ -409,7 +445,12 @@ var main = function () {
                     var slow_val = SLOW_FROM + (SLOW_TO - SLOW_FROM) / 1 * ease(progress);
                     var medium_val = MEDIUM_FROM + (MEDIUM_TO - MEDIUM_FROM) / 1 * ease(progress);
                     var fast_val = FAST_FROM + (FAST_TO - FAST_FROM) / 1 * ease(progress);
-                    updateItems(slow_val, medium_val, fast_val);
+                    var xxslow_val = XXSLOW_FROM + (XXSLOW_TO - XXSLOW_FROM) / 1 * ease(progress);
+                    var xxmedium_val = XXMEDIUM_FROM + (XXMEDIUM_TO - XXMEDIUM_FROM) / 1 * ease(progress);
+                    var xxlarge_val = XXFAST_FROM + (XXFAST_TO - XXFAST_FROM) / 1 * ease(progress);
+                    var headline_val = HEADLINE_FROM + (HEADLINE_TO - HEADLINE_FROM) / 1 * ease(progress);
+                    updateItems(slow_val, medium_val, fast_val, xxslow_val, xxmedium_val, xxlarge_val);
+                    headlineNode.update(headline_val);
                 }
             });
         },

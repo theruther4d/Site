@@ -3,3 +3,47 @@
 *:after {
     box-sizing: border-box;
 }
+
+
+@font-face {
+    font-family: 'azo_sansblack';
+    src: url('../fonts/azosans-black-webfont.woff2') format('woff2'),
+         url('../fonts/azosans-black-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'azo_sanslight';
+    src: url('../fonts/azosans-light-webfont.woff2') format('woff2'),
+         url('../fonts/azosans-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'azo_sansregular';
+    src: url('../fonts/azosans-regular-webfont.woff2') format('woff2'),
+         url('../fonts/azosans-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+html {
+    font-family: 'azo_sansregular', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1 {
+    font-family: 'azo_sansblack', sans-serif;
+    font-size: 24px;
+}
+
+h2 {
+    font-family: 'azo_sanslight', sans-serif;
+    font-size: 18px;
+}

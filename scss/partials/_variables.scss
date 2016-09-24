@@ -40,3 +40,37 @@ $yellow: #F8E71C;
         background-color: $dark;
     }
 }
+
+.color-- {
+    &blue {
+        color: $blue;
+    }
+
+    &purple {
+        color: $purple;
+    }
+
+    &green {
+        color: $green;
+    }
+
+    &orange {
+        color: $orange;
+    }
+
+    &red {
+        color: $red;
+    }
+
+    &white {
+        color: $white;
+    }
+
+    &yellow {
+        color: $yellow;
+    }
+
+    &dark {
+        color: $dark;
+    }
+}
