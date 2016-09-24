@@ -1,0 +1,42 @@
+$dark: #282A36;
+$blue: #96CBFE;
+$purple: #B73B99;
+$green: #96C76D;
+$orange: #D19159;
+$red: #E13B3F;
+$white: #FFFFFF;
+$yellow: #F8E71C;
+
+.bg-- {
+    &blue {
+        background-color: $blue;
+    }
+
+    &purple {
+        background-color: $purple;
+    }
+
+    &green {
+        background-color: $green;
+    }
+
+    &orange {
+        background-color: $orange;
+    }
+
+    &red {
+        background-color: $red;
+    }
+
+    &white {
+        background-color: $white;
+    }
+
+    &yellow {
+        background-color: $yellow;
+    }
+
+    &dark {
+        background-color: $dark;
+    }
+}

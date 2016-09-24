@@ -2,8 +2,9 @@ import Clock from './Clock.js';
 import ScrollEmitter from './ScrollEmitter.js';
 
 class Parallax {
-    constructor( { el, resolver } ) {
-        this.el = el;
+    constructor( { resolver, start, end } ) {
+        this._start = start;
+        this._end = end;
         this._getDimensions();
         this._ticking = false;
         this._resolver = resolver;
@@ -19,10 +20,10 @@ class Parallax {
     }
 
     _getDimensions() {
-        this.box = this.el.getBoundingClientRect();
+        // this.box = this.el.getBoundingClientRect();
         this.windowHeight = window.outerHeight || window.innerHeight;
-        this._start = Math.max( this.box.top - this.windowHeight, 0 );
-        this._end = this.box.bottom;
+        // this._start = Math.max( this.box.top - this.windowHeight, 0 );
+        // this._end = this.box.bottom;
         this._from = 0;
         this._to = 1;
     }
@@ -52,12 +53,12 @@ class Parallax {
 
     _onDraw( timeStamp ) {
         // Do the transform:
-        this._resolver( this.el, this.progress );
+        this._resolver( this.progress );
         this._ticking = false;
     }
 
     _inView() {
-        return ( this._scroll + this.windowHeight >= this.box.top ) && ( this._scroll <= this.box.bottom );
+        return ( this._scroll + this.windowHeight >= this._start ) && ( this._scroll <= this._end );
     }
 };
 

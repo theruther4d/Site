@@ -2,59 +2,81 @@ import Parallax from './Parallax.js';
 
 const main = ( () => {
     return {
-        init: () => {
-            const BOZO_FROM = 0;
-            const BOZO_TO = -1000;
-            const BINGO_FROM = 0;
-            const BINGO_TO = -4000;
-            let bingoVal;
-            let bozoVal;
-            let bongoVal;
-            let dingoVal;
-            const bozoEl = document.getElementById( 'bozo' );
-            const bongoEl = document.getElementById( 'bongo' );
-            const bingoEl = document.getElementById( 'bingo' );
-            const dingoEl = document.getElementById( 'dingo' );
-            let bozoStyle = bozoEl.style;
-            let bongoStyle = bongoEl.style;
-            let bingoStyle = bingoEl.style;
-            let dingoStyle = dingoEl.style;
+        initHeroParallax: () => {
+            const SLOW_FROM = 0;
+            const SLOW_TO = -1000;
+            const MEDIUM_FROM = 0;
+            const MEDIUM_TO = -2000;
+            const FAST_FROM = 0;
+            const FAST_TO = -3000;
+
+            let slow_val;
+            let fast_val;
+            let medium_val;
+
+            const slowNodes = [].slice.apply( document.querySelectorAll( '[data-parallax-speed=slow]' ) );
+            const mediumNodes = [].slice.apply( document.querySelectorAll( '[data-parallax-speed=medium]' ) );
+            const fastNodes = [].slice.apply( document.querySelectorAll( '[data-parallax-speed=fast]' ) );
+            const slow = [];
+            const medium = [];
+            const fast = [];
+
+            class ParallaxItem {
+                constructor( node ) {
+                    this._node = node;
+                    this._style = this._node.style;
+                }
+
+                update( val ) {
+                    this._style.transform = `translate3d( 0, ${ val.toFixed( 2 ) }px, 0 )`
+                }
+            };
+
+            slowNodes.map( ( node ) => {
+                slow.push( new ParallaxItem( node ) );
+            });
+
+            mediumNodes.map( ( node ) => {
+                medium.push( new ParallaxItem( node ) );
+            });
+
+            fastNodes.map( ( node ) => {
+                fast.push( new ParallaxItem( node ) );
+            });
+
+            const updateItems = ( slowProg, mediumProg, fastProg ) => {
+                slow.map( ( item ) => {
+                    item.update( slowProg );
+                });
+
+                medium.map( ( item ) => {
+                    item.update( mediumProg );
+                });
+
+                fast.map( ( item ) => {
+                    item.update( fastProg );
+                });
+            };
 
             const ease = ( t ) => {
-                return t<.5 ? 2*t*t : -1+(4-2*t)*t
+                return t < 0.5 ? ( 2 * t * t ) : ( -1 + ( 4 - 2 * t ) * t );
             }
 
-            const bozo = new Parallax({
-                el: document.getElementById( 'bozo' ),
-                resolver: ( el, progress ) => {
-                    bozoVal = ( BOZO_FROM + ( ( BOZO_TO - BOZO_FROM ) / 1 ) * ease( progress ) );
-                    bozoStyle.transform = `translate3d( 0, ${ bozoVal.toFixed( 2 ) }px, 0 )`;
+            const header = document.getElementById( 'header' );
+            const parallax = new Parallax({
+                start: 0,
+                end: header.getBoundingClientRect().bottom,
+                resolver: ( progress ) => {
+                    let slow_val = ( SLOW_FROM + ( ( SLOW_TO - SLOW_FROM ) / 1 ) * ease( progress ) );
+                    let medium_val = ( MEDIUM_FROM + ( ( MEDIUM_TO - MEDIUM_FROM ) / 1 ) * ease( progress ) );
+                    let fast_val = ( FAST_FROM + ( ( FAST_TO - FAST_FROM ) / 1 ) * ease( progress ) );
+                    updateItems( slow_val, medium_val, fast_val );
                 }
             });
+        },
 
-            const bongo = new Parallax({
-                el: document.getElementById( 'bongo' ),
-                resolver: ( el, progress ) => {
-                    bongoVal = ( BOZO_FROM + ( ( BOZO_TO - BOZO_FROM ) / 1 ) * ease( progress ) );
-                    bongoStyle.transform = `translate3d( 0, ${ bongoVal.toFixed( 2 ) }px, 0 )`;
-                }
-            });
-
-            const bingo = new Parallax({
-                el: document.getElementById( 'bingo' ),
-                resolver: ( el, progress ) => {
-                    bingoVal = ( BINGO_FROM + ( ( BINGO_TO - BINGO_FROM ) / 1 ) * ease( progress ) );
-                    bingoStyle.transform = `translate3d( 0, ${ bingoVal.toFixed( 2 ) }px, 0 )`;
-                }
-            });
-
-            const dingo = new Parallax({
-                el: document.getElementById( 'dingo' ),
-                resolver: ( el, progress ) => {
-                    dingoVal = ( BINGO_FROM + ( ( BINGO_TO - BINGO_FROM ) / 1 ) * ease( progress ) );
-                    dingoStyle.transform = `translate3d( 0, ${ dingoVal.toFixed( 2 ) }px, 0 )`;
-                }
-            });
+        init: () => {
+            main.initHeroParallax();
         }
     }
 })();

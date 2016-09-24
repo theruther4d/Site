@@ -5,6 +5,10 @@ var buffer = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var babel = require('babelify');
+var scss = require( 'gulp-sass' );
+var prefix = require( 'gulp-autoprefixer' );
+var cssMin = require( 'gulp-minify-css' );
+var rename = require( 'gulp-rename' );
 
 function compile(watch) {
   var bundler = watchify(
@@ -43,7 +47,20 @@ function watch() {
   return compile(true);
 };
 
+gulp.task( 'css', () => {
+    return gulp.src( './scss/main.scss' )
+        .pipe( scss() )
+        .pipe( prefix( ['last 2 version', '> 1%', 'ie 8', 'ie 7', 'Firefox > 15'], { cascade: true } ) )
+        .pipe( cssMin() )
+        .pipe( rename( 'style.css' ) )
+        .pipe( gulp.dest( './dist' ) );
+});
+
+gulp.task( 'watchCSS', () => {
+    gulp.watch( './scss/**/*.scss', [ 'css' ] );
+});
+
 gulp.task('build', function() { return compile(); });
 gulp.task('watch', function() { return watch(); });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch', 'css', 'watchCSS']);

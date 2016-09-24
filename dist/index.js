@@ -186,12 +186,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Parallax = function () {
     function Parallax(_ref) {
-        var el = _ref.el;
         var resolver = _ref.resolver;
+        var start = _ref.start;
+        var end = _ref.end;
 
         _classCallCheck(this, Parallax);
 
-        this.el = el;
+        this._start = start;
+        this._end = end;
         this._getDimensions();
         this._ticking = false;
         this._resolver = resolver;
@@ -209,10 +211,10 @@ var Parallax = function () {
     _createClass(Parallax, [{
         key: '_getDimensions',
         value: function _getDimensions() {
-            this.box = this.el.getBoundingClientRect();
+            // this.box = this.el.getBoundingClientRect();
             this.windowHeight = window.outerHeight || window.innerHeight;
-            this._start = Math.max(this.box.top - this.windowHeight, 0);
-            this._end = this.box.bottom;
+            // this._start = Math.max( this.box.top - this.windowHeight, 0 );
+            // this._end = this.box.bottom;
             this._from = 0;
             this._to = 1;
         }
@@ -245,13 +247,13 @@ var Parallax = function () {
         key: '_onDraw',
         value: function _onDraw(timeStamp) {
             // Do the transform:
-            this._resolver(this.el, this.progress);
+            this._resolver(this.progress);
             this._ticking = false;
         }
     }, {
         key: '_inView',
         value: function _inView() {
-            return this._scroll + this.windowHeight >= this.box.top && this._scroll <= this.box.bottom;
+            return this._scroll + this.windowHeight >= this._start && this._scroll <= this._end;
         }
     }]);
 
@@ -318,67 +320,102 @@ exports.default = ScrollEmitter;
 },{"./Emitter.js":2}],5:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _Parallax = require('./Parallax.js');
 
 var _Parallax2 = _interopRequireDefault(_Parallax);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var main = function () {
     return {
-        init: function init() {
-            var BOZO_FROM = 0;
-            var BOZO_TO = -1000;
-            var BINGO_FROM = 0;
-            var BINGO_TO = -4000;
-            var bingoVal = void 0;
-            var bozoVal = void 0;
-            var bongoVal = void 0;
-            var dingoVal = void 0;
-            var bozoEl = document.getElementById('bozo');
-            var bongoEl = document.getElementById('bongo');
-            var bingoEl = document.getElementById('bingo');
-            var dingoEl = document.getElementById('dingo');
-            var bozoStyle = bozoEl.style;
-            var bongoStyle = bongoEl.style;
-            var bingoStyle = bingoEl.style;
-            var dingoStyle = dingoEl.style;
+        initHeroParallax: function initHeroParallax() {
+            var SLOW_FROM = 0;
+            var SLOW_TO = -1000;
+            var MEDIUM_FROM = 0;
+            var MEDIUM_TO = -2000;
+            var FAST_FROM = 0;
+            var FAST_TO = -3000;
 
-            var ease = function ease(t) {
-                return t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            var slow_val = void 0;
+            var fast_val = void 0;
+            var medium_val = void 0;
+
+            var slowNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=slow]'));
+            var mediumNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=medium]'));
+            var fastNodes = [].slice.apply(document.querySelectorAll('[data-parallax-speed=fast]'));
+            var slow = [];
+            var medium = [];
+            var fast = [];
+
+            var ParallaxItem = function () {
+                function ParallaxItem(node) {
+                    _classCallCheck(this, ParallaxItem);
+
+                    this._node = node;
+                    this._style = this._node.style;
+                }
+
+                _createClass(ParallaxItem, [{
+                    key: 'update',
+                    value: function update(val) {
+                        this._style.transform = 'translate3d( 0, ' + val.toFixed(2) + 'px, 0 )';
+                    }
+                }]);
+
+                return ParallaxItem;
+            }();
+
+            ;
+
+            slowNodes.map(function (node) {
+                slow.push(new ParallaxItem(node));
+            });
+
+            mediumNodes.map(function (node) {
+                medium.push(new ParallaxItem(node));
+            });
+
+            fastNodes.map(function (node) {
+                fast.push(new ParallaxItem(node));
+            });
+
+            var updateItems = function updateItems(slowProg, mediumProg, fastProg) {
+                slow.map(function (item) {
+                    item.update(slowProg);
+                });
+
+                medium.map(function (item) {
+                    item.update(mediumProg);
+                });
+
+                fast.map(function (item) {
+                    item.update(fastProg);
+                });
             };
 
-            var bozo = new _Parallax2.default({
-                el: document.getElementById('bozo'),
-                resolver: function resolver(el, progress) {
-                    bozoVal = BOZO_FROM + (BOZO_TO - BOZO_FROM) / 1 * ease(progress);
-                    bozoStyle.transform = 'translate3d( 0, ' + bozoVal.toFixed(2) + 'px, 0 )';
-                }
-            });
+            var ease = function ease(t) {
+                return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            };
 
-            var bongo = new _Parallax2.default({
-                el: document.getElementById('bongo'),
-                resolver: function resolver(el, progress) {
-                    bongoVal = BOZO_FROM + (BOZO_TO - BOZO_FROM) / 1 * ease(progress);
-                    bongoStyle.transform = 'translate3d( 0, ' + bongoVal.toFixed(2) + 'px, 0 )';
+            var header = document.getElementById('header');
+            var parallax = new _Parallax2.default({
+                start: 0,
+                end: header.getBoundingClientRect().bottom,
+                resolver: function resolver(progress) {
+                    var slow_val = SLOW_FROM + (SLOW_TO - SLOW_FROM) / 1 * ease(progress);
+                    var medium_val = MEDIUM_FROM + (MEDIUM_TO - MEDIUM_FROM) / 1 * ease(progress);
+                    var fast_val = FAST_FROM + (FAST_TO - FAST_FROM) / 1 * ease(progress);
+                    updateItems(slow_val, medium_val, fast_val);
                 }
             });
+        },
 
-            var bingo = new _Parallax2.default({
-                el: document.getElementById('bingo'),
-                resolver: function resolver(el, progress) {
-                    bingoVal = BINGO_FROM + (BINGO_TO - BINGO_FROM) / 1 * ease(progress);
-                    bingoStyle.transform = 'translate3d( 0, ' + bingoVal.toFixed(2) + 'px, 0 )';
-                }
-            });
-
-            var dingo = new _Parallax2.default({
-                el: document.getElementById('dingo'),
-                resolver: function resolver(el, progress) {
-                    dingoVal = BINGO_FROM + (BINGO_TO - BINGO_FROM) / 1 * ease(progress);
-                    dingoStyle.transform = 'translate3d( 0, ' + dingoVal.toFixed(2) + 'px, 0 )';
-                }
-            });
+        init: function init() {
+            main.initHeroParallax();
         }
     };
 }();
